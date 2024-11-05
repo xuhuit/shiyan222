@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>异步寻宝游戏</title>
+<style>
+  /* 设置页面背景图 */
+  body, html {
+    height: 100%; /* 使body和html的高度为100% */
+    margin: 0; /* 移除默认边距 */
+  }
+  body {
+    background-image: url('background.jpg'); /* 替换为你的背景图片文件名 */
+    background-size: cover; /* 覆盖整个页面 */
+    background-position: center; /* 居中显示 */
+    background-repeat: no-repeat; /* 不重复 */
+    background-attachment: fixed; /* 背景图固定 */
+  }
+
+  /* 其他样式保持不变 */
+  #log {
+    margin-top: 20px;
+    border: 1px solid black;
+    padding: 10px;
+  }
+</style>
+
+<script>
+// 上传的 JavaScript 代码
+class TreasureMap {
+    static getInitialClue() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve("在古老的图书馆里找到了第一个线索...");
+        }, 1000);
+      });
+    }
+  
+    static decodeAncientScript(clue) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (!clue) {
+            reject("没有线索可以解码!");
+          }
+          resolve("解码成功!宝藏在一座古老的神庙中...");
+        }, 1500);
+      });
+    }
+  
+    static searchTemple(location) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          const random = Math.random();
+          if (random < 0.5) {
+            reject("糟糕!遇到了神庙守卫!");
+          }
+          resolve("找到了一个神秘的箱子...");
+        }, 2000);
+      });
+    }
+  
+    static openTreasureBox() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve("恭喜!你找到了传说中的宝藏!");
+        }, 1000);
+      });
+    }
+}
+
+function findTreasureWithPromises() {
+    TreasureMap.getInitialClue()
+      .then(clue => {
+        displayLog(clue);
+        return TreasureMap.decodeAncientScript(clue);
+      })
+      .then(location => {
+        displayLog(location);
+        return TreasureMap.searchTemple(location);
+      })
+      .then(box => {
+        displayLog(box);
+        return TreasureMap.openTreasureBox();
+      })
+      .then(treasure => {
+        displayLog(treasure);
+      })
+      .catch(error => {
+        displayLog("任务失败: " + error);
+      });
+}
+
+function displayLog(message, imageName) {
+    const logElement = document.getElementById('log');
+    let imgHtml = '';
+    if (imageName) {
+        imgHtml = `<img src="${imageName}" alt="${message}" style="max-width: 200px; margin: 10px;">`;
+    }
+    logElement.innerHTML += `<p>${message}</p>${imgHtml}<br>`;
+}
+</script>
+</head>
+<body>
+<h1>异步寻宝游戏</h1>
+<button onclick="findTreasureWithPromises()">开始寻宝</button>
+<div id="log" style="margin-top: 20px; border: 1px solid black; padding: 10px;"></div>
+
+<script>
+function findTreasureWithPromises() {
+    TreasureMap.getInitialClue()
+      .then(clue => {
+        displayLog(clue, '神庙图片.jpg');
+        return TreasureMap.decodeAncientScript(clue);
+      })
+      .then(location => {
+        displayLog(location, '寻宝大作战.jpg');
+        return TreasureMap.searchTemple(location);
+      })
+      .then(box => {
+        displayLog(box, '宝藏图片1.jpg');
+        return TreasureMap.openTreasureBox();
+      })
+      .then(treasure => {
+        displayLog(treasure, '宝藏图片2.jpg');
+      })
+      .catch(error => {
+        displayLog("任务失败: " + error, 'JS 模拟找宝藏.png');
+      });
+}
+</script>
+</body>
+</html>
